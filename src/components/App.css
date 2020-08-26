@@ -1,0 +1,6 @@
+.app-title {
+  display: flex;
+  justify-content: center;
+  background: #24292e;
+  color: #fff;
+}
