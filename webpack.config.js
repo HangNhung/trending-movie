@@ -26,7 +26,15 @@ module.exports = {
         test: /\.css$/,
         // css-loader giúp biên dịch @import và url()
         // style-loader: ghi style vào trong tag
-        use: ["style-loader", "css-loader"],
+        use: ["style-loader", "css-loader", "postcss-loader"],
+      },
+      {
+        test: /\.(svg|png)$/,
+        use: [
+          {
+            loader: "file-loader",
+          },
+        ],
       },
     ],
   },

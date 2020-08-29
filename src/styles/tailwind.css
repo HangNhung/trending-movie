@@ -1,0 +1,17 @@
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
+
+.filter-blur {
+  filter: blur(50px);
+}
+
+.hide {
+  display: none;
+}
+
+#item:hover .hide {
+  display: block;
+}
