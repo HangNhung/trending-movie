@@ -3,7 +3,6 @@ module.exports = {
     extend: {
       lineHeight: {
         11: "5.875rem",
-        // 12: "20.5 rem",
       },
       fontFamily: {
         sans: ["Roboto", "sans-serif"],
@@ -20,17 +19,15 @@ module.exports = {
         "17xl": "15rem",
       },
       height: {
+        "1/3": "33%",
+        "1/2": "50%",
         "3/4": "75%",
-        "scroll-review": "calc(100% - 3.25rem)",
-        "scroll-movie": "calc(100% - 4.5rem)",
-        "img-next-slide": "calc(100% - 6.25rem)",
+        "scroll-review": "calc(100% - 4.5rem)",
       },
       backgroundImage: () => ({
         "hero-pattern": "url('/public/advanture.png')",
       }),
-      inset: {
-        "-18": "-4.5rem",
-      },
+      backgroundColor: { nero: "#1C1C1C", lighter: "#DD6564" },
       opacity: {
         10: "0.1",
       },
@@ -38,6 +35,9 @@ module.exports = {
   },
   variants: {
     cursor: ["responsive", "hover", "focus"],
+    width: ["responsive"],
+    display: ["responsive"],
+    lineHeight: ["responsive"],
   },
   plugins: [],
 };

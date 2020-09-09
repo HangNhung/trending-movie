@@ -4,8 +4,13 @@
 
 @tailwind utilities;
 
+html,
+body {
+  overflow: hidden;
+}
+
 .filter-blur {
-  filter: blur(50px);
+  filter: blur(120px);
 }
 
 .hide {
@@ -14,4 +19,14 @@
 
 #item:hover .hide {
   display: block;
+}
+
+.item-movie-wrapper:hover::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%);
 }
