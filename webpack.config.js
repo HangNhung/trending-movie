@@ -1,19 +1,16 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
-  entry: "./src/index.js",
+  entry: path.join(__dirname, "src/index.js"),
   output: {
     path: path.join(__dirname, "/dist"),
-    filename: "boundle.js",
-    publicPath: "/",
+    filename: "bundle.js",
   },
 
   module: {
-    //  webpack only understands JavaScript and JSON files.
-    // Loaders allow webpack to process other types of files
-    // and convert them into valid modules that can be consumed by your application
-    // and added to the dependency graph.
     rules: [
       {
         // which file or files should be transformed
@@ -24,15 +21,31 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        // css-loader giúp biên dịch @import và url()
-        // style-loader: ghi style vào trong tag
-        use: ["style-loader", "css-loader", "postcss-loader"],
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+          },
+          "css-loader",
+          "postcss-loader",
+        ],
+        exclude: /\.module\.css$/,
       },
       {
-        test: /\.(svg|png)$/,
+        test: /\.(svg)$/,
         use: [
           {
             loader: "file-loader",
+          },
+        ],
+      },
+      {
+        test: /\.(png|jpg|gif)$/i,
+        use: [
+          {
+            loader: "url-loader",
+            options: {
+              limit: 8192,
+            },
           },
         ],
       },
@@ -40,23 +53,27 @@ module.exports = {
   },
 
   devServer: {
-    historyApiFallback: true,
+    contentBase: path.resolve(__dirname, "dist"),
+    port: 3001,
   },
 
   resolve: {
     extensions: [".mjs", ".ts", ".tsx", ".js", ".jsx"],
     alias: {
-      // Here is some example for aliases. now you can use absolute import. for example:
-      // import Box from '@components/box/box;
+      // Here is some example for aliases. now you can use absolute import.
       "@components": path.resolve(__dirname, "./src/components"),
     },
   },
 
   plugins: [
+    new CleanWebpackPlugin(),
     // The plugin will generate an HTML5 file for you that includes all your
     // webpack bundles in the body using script tags.
     new HtmlWebpackPlugin({
       template: "./src/index.html",
+    }),
+    new MiniCssExtractPlugin({
+      filename: "tailwind.css",
     }),
   ],
   //   mode: "developer",
