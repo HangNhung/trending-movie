@@ -24,9 +24,6 @@ module.exports = {
         "3/4": "75%",
         "scroll-review": "calc(100% - 4.5rem)",
       },
-      backgroundImage: () => ({
-        "hero-pattern": "url('/public/advanture.png')",
-      }),
       backgroundColor: { nero: "#1C1C1C", lighter: "#DD6564" },
       opacity: {
         10: "0.1",

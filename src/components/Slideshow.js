@@ -3,35 +3,28 @@ import FacebookSVG from "../assets/mdi_facebook.svg";
 import InstagramSVG from "../assets/mdi_instagram.svg";
 import TwitterSVG from "../assets/mdi_twitter.svg";
 
-export default function Slideshow({ devicesMobile, images = [] }) {
-  const [thumbnails, setThumnails] = useState([]);
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [nextSlide, setNextSlide] = useState("");
+export default function Slideshow({
+  isMobile,
+  parentCallback,
+  path,
+  index,
+  length,
+}) {
   const [widthRenderItem, setWidthRenderItem] = useState("");
-  const [isMobile, setIsMobile] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
   const widthMovieImage = useRef(0);
+  const urlImage = "https://image.tmdb.org/t/p/w440_and_h660_face";
 
   useEffect(() => {
-    setThumnails(images);
-    setIsMobile(devicesMobile);
-
-    if (currentSlide === images.length - 1) {
-      setNextSlide(0);
-    } else {
-      setNextSlide(currentSlide + 1);
-    }
-  }, [images, currentSlide]);
+    setCurrentSlide(index);
+  }, [index]);
 
   function previous() {
-    if (currentSlide > 0) {
-      setCurrentSlide(currentSlide - 1);
-    }
+    parentCallback(currentSlide - 1);
   }
 
   function next() {
-    if (currentSlide !== thumbnails.length - 1) {
-      setCurrentSlide(currentSlide + 1);
-    }
+    parentCallback(currentSlide + 1);
   }
 
   const onImgLoad = () => {
@@ -44,20 +37,30 @@ export default function Slideshow({ devicesMobile, images = [] }) {
         <div className="flex h-full lg:transform lg:-translate-x-1/2">
           <div className="w-full flex-shrink-0">
             <div className="relative h-full">
-              <img
-                ref={widthMovieImage}
-                onLoad={onImgLoad}
-                src={images[currentSlide]}
-                className="inline-block absolute inset-0 object-cover h-full w-auto mx-auto my-auto"
-              />
+              {path[currentSlide] && (
+                <img
+                  ref={widthMovieImage}
+                  onLoad={onImgLoad}
+                  src={urlImage + path[currentSlide].poster_path}
+                  className="inline-block absolute inset-0 object-cover h-full w-auto mx-auto my-auto"
+                />
+              )}
             </div>
           </div>
           <div className="hidden lg:block xl:block w-full flex-shrink-0 ml-16">
             <div style={{ top: "12.5%" }} className="relative h-3/4">
-              <img
-                src={images[nextSlide]}
-                className="inline-block absolute inset-0 object-cover h-full w-auto mx-auto my-auto"
-              />
+              {path[currentSlide] && (
+                <img
+                  ref={widthMovieImage}
+                  onLoad={onImgLoad}
+                  src={
+                    currentSlide + 1 < 20
+                      ? urlImage + path[currentSlide + 1].poster_path
+                      : ""
+                  }
+                  className="inline-block absolute inset-0 object-cover h-full w-auto mx-auto my-auto"
+                />
+              )}
             </div>
           </div>
         </div>
@@ -65,7 +68,7 @@ export default function Slideshow({ devicesMobile, images = [] }) {
 
       <div
         style={{
-          transform: isMobile ? `translateX(${widthRenderItem})` : null,
+          transform: !isMobile ? `translateX(${widthRenderItem})` : null,
         }}
         className="justify-center lg:justify-start flex my-2"
       >
@@ -75,7 +78,7 @@ export default function Slideshow({ devicesMobile, images = [] }) {
       </div>
       <div
         style={{
-          transform: isMobile ? `translateX(${widthRenderItem})` : null,
+          transform: !isMobile ? `translateX(${widthRenderItem})` : null,
         }}
         className="justify-center lg:justify-start lg:absolute lg:bottom-0 flex items-center"
       >
@@ -94,7 +97,7 @@ export default function Slideshow({ devicesMobile, images = [] }) {
         <div
           className={
             "text-red-strong text-sm md:text-md lg:text-lg xl:text-xl pl-2 font-medium font-bold " +
-            (currentSlide === thumbnails.length - 1
+            (currentSlide === length
               ? "text-red-strong text-opacity-50 cursor-not-allowed"
               : "cursor-pointer")
           }

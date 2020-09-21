@@ -4,50 +4,27 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
-  entry: path.join(__dirname, "src/index.js"),
+  entry: "./src/index.js",
   output: {
-    path: path.join(__dirname, "/dist"),
+    path: path.resolve(__dirname, "/dist"),
     filename: "bundle.js",
+    // publicPath: "./src/assets",
   },
 
   module: {
     rules: [
       {
-        // which file or files should be transformed
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        // which loader should be used to do the transforming
         use: ["babel-loader"],
       },
       {
         test: /\.css$/,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-          },
-          "css-loader",
-          "postcss-loader",
-        ],
-        exclude: /\.module\.css$/,
+        use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader"],
       },
       {
-        test: /\.(svg)$/,
-        use: [
-          {
-            loader: "file-loader",
-          },
-        ],
-      },
-      {
-        test: /\.(png|jpg|gif)$/i,
-        use: [
-          {
-            loader: "url-loader",
-            options: {
-              limit: 8192,
-            },
-          },
-        ],
+        test: /\.(woff|woff2|eot|ttf|otf)$/,
+        use: ["file-loader"],
       },
     ],
   },
@@ -67,8 +44,6 @@ module.exports = {
 
   plugins: [
     new CleanWebpackPlugin(),
-    // The plugin will generate an HTML5 file for you that includes all your
-    // webpack bundles in the body using script tags.
     new HtmlWebpackPlugin({
       template: "./src/index.html",
     }),

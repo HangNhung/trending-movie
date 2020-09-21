@@ -1,11 +1,20 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CloseSVG from "../assets/mdi_close.svg";
 import MagnifySVG from "../assets/mdi_magnify.svg";
-import Image from "../assets/advanture.png";
 import ArrowSVG from "../assets/mdi_arrow-right.svg";
 
-function CustomModalMovie({ isShowing, onRequestClose }) {
-  const showHideClassName = isShowing ? "block" : "hidden";
+function CustomModalMovie({
+  data = {},
+  isShowing,
+  onRequestClose,
+  parentCallback,
+}) {
+  const [showHideClassName, setShowHideClassName] = useState("hidden");
+  const urlImage = "https://image.tmdb.org/t/p/w440_and_h660_face";
+
+  useEffect(() => {
+    isShowing ? setShowHideClassName("block") : setShowHideClassName("hidden");
+  }, [isShowing]);
 
   return (
     <div
@@ -31,10 +40,10 @@ function CustomModalMovie({ isShowing, onRequestClose }) {
       </div>
       <div className="overflow-y-scroll flex-1 px-8 lg:px-16">
         <div className="w-full flex flex-wrap">
-          {Array.apply(null, { length: 20 }).map((e, i) => (
+          {data.map((item, i) => (
             <div
               id="item"
-              key={i}
+              key={item.id}
               className="relative w-1/2 lg:w-1/4 pr-8 mb-8"
             >
               <div
@@ -42,17 +51,20 @@ function CustomModalMovie({ isShowing, onRequestClose }) {
                 style={{ paddingTop: "150%" }}
               >
                 <img
-                  src={Image}
+                  src={urlImage + item.poster_path}
                   className="block absolute w-full h-full inset-0 object-cover"
                 />
 
                 <div className="hide relative z-50">
                   <div className="absolute bg-gradient-to-b from-transparent to-black h-full w-full flex flex-col justify-end px-4 pb-8">
                     <div className="text-white text-xl font-bold leading-6 pb-2">
-                      Avengers: Endgame
+                      {item.title}
                     </div>
                     <div className="pb-2">
-                      <button className="text-red-strong text-base font-medium pr-2">
+                      <button
+                        className="text-red-strong text-base font-medium pr-2"
+                        onClick={() => parentCallback(i)}
+                      >
                         View Details
                       </button>
                       <ArrowSVG className="inline " alt="arror_right" />
