@@ -19,7 +19,7 @@ export default function App() {
   const [trendingMovieDetail, setTrendingMovieDetail] = useState({
     details: [],
   });
-  const [indexMovie, setIndexMovie] = useState(-1);
+  const [indexMovie, setIndexMovie] = useState(null);
 
   useEffect(() => {
     api
@@ -45,6 +45,14 @@ export default function App() {
   useEffect(() => {
     // get trending movie list
     if (listTrendingMovie.items[indexMovie]) {
+      api
+        .fetcher(
+          `${common.url}/movie/${listTrendingMovie.items[indexMovie].id}?api_key=${common.apiKey}&language=en-US`
+        )
+        .then((dataDetails) => {
+          setTrendingMovieDetail({ details: dataDetails });
+        })
+        .catch((err) => console.err("err", err));
       api
         .fetcher(
           `${common.url}/movie/${listTrendingMovie.items[indexMovie].id}/reviews?api_key=${common.apiKey}&language=en-US&page=1`
@@ -121,7 +129,6 @@ export default function App() {
             <div className="w-full lg:w-2/3 xl:w-2/3 px-8 py-24 lg:px-16 lg:py-32 overflow-y-auto lg:overflow-hidden xl:overflow-hidden">
               <div className="lg:hidden xl:hidden w-full h-full flex flex-col mb-8">
                 <Slideshow
-                  isMobile={true}
                   parentCallback={callbackFunction}
                   path={listTrendingMovie.items}
                   index={indexMovie}
@@ -189,7 +196,6 @@ export default function App() {
             <div className="hidden lg:block xl:block w-1/3 py-32 flex flex-col">
               {listTrendingMovie.items && (
                 <Slideshow
-                  isMobile={false}
                   parentCallback={callbackFunction}
                   path={listTrendingMovie.items}
                   index={indexMovie}
