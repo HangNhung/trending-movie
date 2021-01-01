@@ -4,11 +4,14 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
-  entry: "./src/index.js",
+  entry: {
+    index: "./src/index.js",
+    app: "./src/App.js",
+  },
   output: {
-    path: path.resolve(__dirname, "/dist"),
-    filename: "bundle.js",
-    // publicPath: "./src/assets",
+    path: path.resolve(__dirname, "dist"),
+    filename: "[name].bundle.js",
+    publicPath: "/",
   },
 
   module: {
@@ -19,36 +22,43 @@ module.exports = {
         use: ["babel-loader"],
       },
       {
-        test: /\.css$/,
+        test: /\.css$/i,
+        exclude: /node_modules/,
         use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader"],
       },
       {
-        test: /\.(woff|woff2|eot|ttf|otf)$/,
-        use: ["file-loader"],
+        test: /\.(svg|png)$/i,
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+              name: "[path][name].[ext]",
+            },
+          },
+        ],
       },
     ],
   },
 
   devServer: {
-    contentBase: path.resolve(__dirname, "dist"),
+    historyApiFallback: true,
+    contentBase: path.resolve(__dirname, "/dist"),
     port: 3001,
   },
 
   resolve: {
-    extensions: [".mjs", ".ts", ".tsx", ".js", ".jsx"],
-    alias: {
-      // Here is some example for aliases. now you can use absolute import.
-      "@components": path.resolve(__dirname, "./src/components"),
-    },
+    extensions: ["*", ".js", ".jsx"],
   },
 
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: "./src/index.html",
+      filename: "index.html",
     }),
     new MiniCssExtractPlugin({
-      filename: "tailwind.css",
+      filename: "[name].css",
+      chunkFilename: "[id].css",
     }),
   ],
   //   mode: "developer",

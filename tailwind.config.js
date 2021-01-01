@@ -1,6 +1,11 @@
 module.exports = {
+  purge: ["./**/*.html"],
   theme: {
     extend: {
+      inset: {
+        "1/4": "25%",
+        "1/8": "12.5%",
+      },
       lineHeight: {
         11: "5.875rem",
       },

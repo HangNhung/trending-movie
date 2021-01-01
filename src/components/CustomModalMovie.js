@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import CloseSVG from "../assets/mdi_close.svg";
 import MagnifySVG from "../assets/mdi_magnify.svg";
 import ArrowSVG from "../assets/mdi_arrow-right.svg";
+import * as image from "../const/images";
 
 function CustomModalMovie({
   data = {},
@@ -10,7 +11,6 @@ function CustomModalMovie({
   parentCallback,
 }) {
   const [showHideClassName, setShowHideClassName] = useState("hidden");
-  const urlImage = "https://image.tmdb.org/t/p/w440_and_h660_face";
 
   useEffect(() => {
     isShowing ? setShowHideClassName("block") : setShowHideClassName("hidden");
@@ -51,7 +51,7 @@ function CustomModalMovie({
                 style={{ paddingTop: "150%" }}
               >
                 <img
-                  src={urlImage + item.poster_path}
+                  src={image.urlImage + item.poster_path}
                   className="block absolute w-full h-full inset-0 object-cover"
                 />
 
